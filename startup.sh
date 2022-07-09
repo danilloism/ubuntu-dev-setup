@@ -1,38 +1,29 @@
 echo "Welcome! Let's start setting up your system. It could take more than 10 minutes, be patient"
 
+wget -O - https://teejeetech.com/scripts/jammy/install_nala | bash
+
+echo "Upgrading built-in applications"
+sudo nala update && sudo nala upgrade
+
 echo "What name do you want to use in GIT user.name?"
-echo "For example, mine will be \"Luke Morales\""
+echo "For example, mine will be \"Danillo Ilggner\""
 read git_config_user_name
 
 echo "What email do you want to use in GIT user.email?"
-echo "For example, mine will be \"lukemorales@live.com\""
+echo "For example, mine will be \"danilloilggner@gmail.com\""
 read git_config_user_email
 
 echo "What is your github username?"
-echo "For example, mine will be \"lukemorales\""
+echo "For example, mine will be \"danilloism\""
 read username
 
-cd ~ && sudo apt-get update
-
-echo 'Installing curl' 
-sudo apt-get install curl -y
+cd ~
 
 echo 'Installing neofetch' 
-sudo apt-get install neofetch -y
+sudo nala install neofetch -y
 
-echo 'Installing tool to handle clipboard via CLI'
-sudo apt-get install xclip -y
-
-echo 'Installing latest git' 
-sudo add-apt-repository ppa:git-core/ppa -y
-sudo apt-get update && sudo apt-get install git -y
-
-echo 'Installing python3-pip'
-sudo apt-get install python3-pip -y
-
-echo 'Installing getgist to download dot files from gist'
-sudo pip3 install getgist
-export GETGIST_USER=$username
+echo 'Installing git' 
+sudo nala install git -y
 
 if [$XDG_CURRENT_DESKTOP == 'KDE'] ; then
     echo 'Cloning your Konsole configs from gist'
@@ -80,7 +71,7 @@ ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/the
 source ~/.zshrc
 
 echo 'Installing FiraCode'
-sudo apt-get install fonts-firacode -y
+sudo nala install fonts-firacode -y
 
 echo 'Installing NVM' 
 sh -c "$(curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash)"
