@@ -1,6 +1,6 @@
 echo "Welcome! Let's start setting up your system. It could take more than 10 minutes, be patient"
 
-wget -O - https://teejeetech.com/scripts/jammy/install_nala | bash
+sh -c "$(wget -O - https://teejeetech.com/scripts/jammy/install_nala | bash)"
 
 echo "Upgrading built-in applications"
 sudo nala update && sudo nala upgrade
@@ -25,56 +25,20 @@ sudo nala install neofetch -y
 echo 'Installing git' 
 sudo nala install git -y
 
-if [$XDG_CURRENT_DESKTOP == 'KDE'] ; then
-    echo 'Cloning your Konsole configs from gist'
-    cd ~/.local/share/konsole && getmy OmniKonsole.profile && getmy OmniTheme.colorscheme
-
-    echo 'Installing Latte Dock'
-    sudo add-apt-repository ppa:kubuntu-ppa/backports -y
-    sudo apt-get update && sudo apt-get dist-upgrade
-    sudo apt-get install cmake extra-cmake-modules qtdeclarative5-dev libqt5x11extras5-dev libkf5iconthemes-dev libkf5plasma-dev libkf5windowsystem-dev libkf5declarative-dev libkf5xmlgui-dev libkf5activities-dev build-essential libxcb-util-dev libkf5wayland-dev git gettext libkf5archive-dev libkf5notifications-dev libxcb-util0-dev libsm-dev libkf5crash-dev libkf5newstuff-dev libxcb-shape0-dev libxcb-randr0-dev libx11-dev libx11-xcb-dev -y
-    sudo git clone https://github.com/KDE/latte-dock.git /usr/local/latte-dock
-    cd /usr/local/latte-dock && sudo sh install.sh
-
-    echo 'Installing Kvantum Manager'
-    sudo add-apt-repository ppa:papirus/papirus -y
-    sudo apt-get update && sudo apt install qt5-style-kvantum -y
-fi
-
 echo "Setting up your git global user name and email"
 git config --global user.name "$git_config_user_name"
 git config --global user.email $git_config_user_email
-
-echo 'Cloning your .gitconfig from gist'
-getmy .gitconfig
 
 echo 'Generating a SSH Key'
 ssh-keygen -t rsa -b 4096 -C $git_config_user_email
 ssh-add ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub | xclip -selection clipboard
 
-echo 'Installing ZSH'
-sudo apt-get install zsh -y
-sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-chsh -s $(which zsh)
-
-echo 'Cloning your .zshrc from gist'
-getmy .zshrc
-
-echo 'Indexing snap to ZSH'
-sudo chmod 777 /etc/zsh/zprofile
-echo "emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'" >> /etc/zsh/zprofile
-
-echo 'Installing Spaceship ZSH Theme'
-git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
-ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
-source ~/.zshrc
-
 echo 'Installing FiraCode'
 sudo nala install fonts-firacode -y
 
 echo 'Installing NVM' 
-sh -c "$(curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash)"
+sh -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash)"
 
 export NVM_DIR="$HOME/.nvm" && (
 git clone https://github.com/creationix/nvm.git "$NVM_DIR"
@@ -85,13 +49,19 @@ git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-source ~/.zshrc
+source ~/.bashrc
 clear
 
 echo 'Installing NodeJS LTS'
 nvm --version
 nvm install --lts
 nvm current
+
+echo 'Installing NodeJS latest version'
+nvm install node
+
+echo 'Setting NodeJS latest version as default'
+nvm alias default 18
 
 echo 'Installing Yarn'
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
