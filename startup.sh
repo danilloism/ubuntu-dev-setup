@@ -1,3 +1,5 @@
+#! /bin/sh
+
 echo "Welcome! Let's start setting up your system. It could take more than 10 minutes, be patient"
 
 sh -c "$(wget -O - https://teejeetech.com/scripts/jammy/install_nala | bash)"
@@ -40,15 +42,6 @@ sudo nala install fonts-firacode -y
 echo 'Installing NVM' 
 sh -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash)"
 
-export NVM_DIR="$HOME/.nvm" && (
-git clone https://github.com/creationix/nvm.git "$NVM_DIR"
-cd "$NVM_DIR"
-git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
-) && \. "$NVM_DIR/nvm.sh"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 source ~/.bashrc
 clear
 
@@ -63,15 +56,15 @@ nvm install node
 echo 'Setting NodeJS latest version as default'
 nvm alias default 18
 
-echo 'Installing Yarn'
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt-get update && sudo apt-get install --no-install-recommends yarn
-echo '"--emoji" true' >> ~/.yarnrc
+echo 'Installing pnpm'
+npm i -g pnpm
 
-echo 'Installing Typescript, AdonisJS CLI and Lerna'
-yarn global add typescript @adonisjs/cli lerna
-clear
+# echo 'Installing Yarn'
+
+
+# echo 'Installing Typescript, AdonisJS CLI and Lerna'
+# yarn global add typescript @adonisjs/cli lerna
+# clear
 
 echo 'Installing VSCode'
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
@@ -79,16 +72,6 @@ sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.
 sudo sh -c 'echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
 sudo apt-get install apt-transport-https -y
 sudo apt-get update && sudo apt-get install code -y
-
-echo 'Installing Code Settings Sync'
-code --install-extension Shan.code-settings-sync
-sudo apt-get install gnome-keyring -y
-cls
-
-echo 'Installing Vivaldi' 
-wget -qO- https://repo.vivaldi.com/archive/linux_signing_key.pub | sudo apt-key add -
-sudo add-apt-repository 'deb https://repo.vivaldi.com/archive/deb/ stable main' -y
-sudo apt update && sudo apt install vivaldi-stable
 
 echo 'Launching Vivaldi on Github so you can paste your keys'
 vivaldi https://github.com/settings/keys </dev/null >/dev/null 2>&1 & disown
