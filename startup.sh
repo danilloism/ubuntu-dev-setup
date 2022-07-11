@@ -60,12 +60,12 @@ echo 'Setting NodeJS latest version as default'
 nvm alias default node
 
 echo 'Installing pnpm'
-npm i -g pnpm
+npm i pnpm --location=global
 
 source ~/.bashrc
 
-# echo 'Installing Yarn'
-
+echo 'Installing Yarn, Typescript, NestJS CLI and AdonisJS CLI'
+pnpm add -g yarn typescript @nestjs/cli @adonisjs/cli
 
 # echo 'Installing Typescript, AdonisJS CLI and Lerna'
 # yarn global add typescript @adonisjs/cli lerna
@@ -82,7 +82,7 @@ sudo snap install android-studio --classic
 echo 'Installing Flutter'
 sudo snap install flutter --classic
 source ~/.bashrc
-flutter doctor --android-licenses
+# flutter doctor --android-licenses
 flutter doctor -v
 
 echo 'Launching Vivaldi on Github so you can paste your keys'
