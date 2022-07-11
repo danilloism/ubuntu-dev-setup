@@ -42,6 +42,9 @@ sudo nala install fonts-firacode -y
 echo 'Installing private codecs'
 sudo nala install ubuntu-restricted-extras -y
 
+echo 'Installing Rust'
+sh -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh)"
+
 echo 'Installing NVM' 
 sh -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash)"
 
@@ -60,16 +63,13 @@ echo 'Setting NodeJS latest version as default'
 nvm alias default node
 
 echo 'Installing pnpm'
-npm i pnpm --location=global
+npm i --location=global pnpm
+pnpm setup
 
 source ~/.bashrc
 
 echo 'Installing Yarn, Typescript, NestJS CLI and AdonisJS CLI'
 pnpm add -g yarn typescript @nestjs/cli @adonisjs/cli
-
-# echo 'Installing Typescript, AdonisJS CLI and Lerna'
-# yarn global add typescript @adonisjs/cli lerna
-# clear
 
 echo 'Installing VSCode'
 wget -O vscode.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
@@ -90,8 +90,7 @@ vivaldi https://github.com/settings/keys </dev/null >/dev/null 2>&1 & disown
 
 echo 'Installing Docker'
 sudo nala purge docker docker-engine docker.io docker-compose containerd runc -y
-sudo nala remove docker docker-engine docker.io docker-compose containerd runc -y
-sudo -- sh -c "$(curl -fsSL https://get.docker.com -o get-docker.sh | bash)"
+sudo -- sh -c "$(curl -fsSL https://get.docker.com -o get-docker.sh | ebash)"
 sudo systemctl start docker
 sudo systemctl enable docker
 docker --version
